@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/saikumar-tec/argocd-demo.git
     targetRevision: HEAD
-    path: Argo-cddemo/k8s
+    path: k8s
 
   destination:
     server: https://kubernetes.default.svc
