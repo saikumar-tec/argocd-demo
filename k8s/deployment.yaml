@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: nodeapp
-        image: sample-ardocd-demo:v1 
+        image: saikumaar/sample-ardocd-demo:v1
         ports:
         - containerPort: 3000
