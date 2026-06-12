@@ -13,7 +13,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
-    # 1. Build and name the image locally in one step
+    # 1. Build and name the image locally
     - name: Build the Docker image
       run: docker build -t my-image:v1 . 
 
@@ -21,13 +21,24 @@ jobs:
     - name: Docker tag
       run: docker tag my-image:v1 saikumaar/my-image:v1
 
-    # 3. Log in to Docker Hub using your username and GitHub Secrets
+    # 3. Scan the image using Aqua Security Trivy
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.28.0  # Uses the stable GitHub Action version
+      with:
+        image-ref: 'saikumaar/my-image:v1'
+        format: 'table'
+        exit-code: '1' # CRITICAL: This will stop the pipeline if high-risk vulnerabilities are found
+        ignore-unfixed: true # Skips vulnerabilities that don't have an available fix yet
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+    # 4. Log in to Docker Hub (Only runs if Trivy scan passes successfully)
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: 'saikumaar'
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # 4. Push the correctly tagged image to Docker Hub
+    # 5. Push the verified image to Docker Hub
     - name: Docker push
       run: docker push saikumaar/my-image:v1
