@@ -6,17 +6,28 @@ on:
      - main
      
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 1. Build and name the image locally in one step
     - name: Build the Docker image
-      run: docker build . 
+      run: docker build -t my-image:v1 . 
+
+    # 2. Tag the local image for your Docker Hub repository
     - name: Docker tag
       run: docker tag my-image:v1 saikumaar/my-image:v1
 
-    - name: docker push
-      run: docker push saikumaar/my-inage:v1
+    # 3. Log in to Docker Hub using your username and GitHub Secrets
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: 'saikumaar'
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # 4. Push the correctly tagged image to Docker Hub
+    - name: Docker push
+      run: docker push saikumaar/my-image:v1
