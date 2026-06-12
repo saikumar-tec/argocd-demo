@@ -22,15 +22,13 @@ jobs:
       run: docker tag my-image:v1 saikumaar/my-image:v1
 
     # 3. Scan the image using the newly updated, secure Trivy Action tag (v0.36.0)
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@v0.36.0  # CHANGED: Added the mandatory "v" prefix format
-      with:
-        image-ref: 'saikumaar/my-image:v1'
-        format: 'table'
-        exit-code: '1' 
-        ignore-unfixed: false 
-        vuln-type: 'os,library'
-        severity: 'CRITICAL,HIGH'
+    - name: Trivy Scan
+      run: |
+         trivy image \
+         --severity CRITICAL \
+         --exit-code 1 \
+         my-image:v1
+      
 
     # 4. Log in to Docker Hub (Only runs if Trivy scan passes successfully)
     - name: Log in to Docker Hub
