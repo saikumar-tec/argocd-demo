@@ -16,7 +16,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . 
     - name: Docker tag
-      run: docker tag my-image:v1 saikumaar/my-inage:v1
+      run: docker tag my-image:v1 saikumaar/my-image:v1
 
     - name: docker push
       run: docker push saikumaar/my-inage:v1
