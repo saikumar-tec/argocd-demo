@@ -21,14 +21,14 @@ jobs:
     - name: Docker tag
       run: docker tag my-image:v1 saikumaar/my-image:v1
 
-    # 3. Scan the image using Aqua Security Trivy
+    # 3. Scan the image using the newly updated, secure Trivy Action tag (v0.36.0)
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.28.0  # Uses the stable GitHub Action version
+      uses: aquasecurity/trivy-action@v0.36.0  # CHANGED: Added the mandatory "v" prefix format
       with:
         image-ref: 'saikumaar/my-image:v1'
         format: 'table'
-        exit-code: '1' # CRITICAL: This will stop the pipeline if high-risk vulnerabilities are found
-        ignore-unfixed: true # Skips vulnerabilities that don't have an available fix yet
+        exit-code: '1' 
+        ignore-unfixed: true 
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
 
